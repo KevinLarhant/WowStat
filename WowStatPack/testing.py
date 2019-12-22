@@ -67,7 +67,7 @@ token = get_token(tokenURL + credentials)
 # print(info.json())
 
 # charge  fichier json stat war
-# file = "jsonWaktorrStat.json"
+# file = "/jsonStats/dalaran_waktorr_stat.json"
 # with open(file, "r") as f:
 #     statWar = json.load(f)
 
