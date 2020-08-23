@@ -1,4 +1,6 @@
 import json
+from json import JSONDecodeError
+
 import requests
 
 APIPath = 'https://eu.api.blizzard.com'
@@ -9,7 +11,7 @@ credentials = f'&client_id={myOAuth}&client_secret={mySecret}'
 paramz = '?locale=en_US&access_token='
 # realm
 dal = 'dalaran'
-ys = 'Ysondre'
+ys = 'ysondre'
 
 
 def get_token(url):
@@ -18,7 +20,15 @@ def get_token(url):
 
 def request_to_api(req):
     print('requesting : ', APIPath + req)
-    return requests.get(APIPath + req).json()
+    try:
+        res_request = requests.get(APIPath + req)
+        if res_request.ok:
+            return res_request.json()
+        else:
+            print('Error request : ', res_request.status_code, res_request.reason, ' in ', res_request.elapsed, 'ms')
+            raise ConnectionError()
+    except JSONDecodeError:
+        print('Error decode JSON')
 
 
 def get_basic_info_char_by_server_name(realm, char):
@@ -27,7 +37,7 @@ def get_basic_info_char_by_server_name(realm, char):
 
 def get_all_stat_by_server_name(realm, char, token):
     return request_to_api(
-        f'/wow/character/{realm}/{char}?fields=statistics&locale=en_US&access_token={token}&namespace=static-eu')
+        f'/profile/wow/character/{realm}/{char}?fields=statistics&locale=en_US&access_token={token}&namespace=profile-eu')
 
 
 def get_bg_done(statJson):
@@ -52,17 +62,19 @@ def write_stat(realm, char, token):
         fileStat.write(json.dumps(get_all_stat_by_server_name(realm, char, token), indent=4))
 
 
-def add_my_char():
-    c = {'aktø': dal, 'waktorr': dal, 'kishaa': dal, 'klehia': dal, 'aktto': dal, 'kamss': dal, 'kaezia': dal,
-         'kboom': dal, 'wakito': dal, 'keanna': dal, 'kylx': dal, 'kyootie': dal, 'aktok': dal, 'akkto': dal,
-         'Aktø': ys, 'kziin': ys, 'akto': ys}  # todo :get from config file
+def listing_my_char():  # todo : refaire depuis fichier ou "Account Profile API"
+    dalaran_char = ['aktø', 'waktorr', 'kishaa', 'klehia', 'aktto', 'kamss', 'kaezia', 'kboom', 'wakito', 'keanna',
+                    'kylx', 'kyootie', 'aktok', 'akkto']
+    ysondre_char = ['aktø', 'kziin', 'akto']
+    c = {dal: dalaran_char, ys: ysondre_char}
     return c
 
 
-def create_json_file():
-    my_char = add_my_char()
-    for char in my_char:
-        write_stat(my_char[char], char, token)
+def create_json_file():  # todo:refaire structure ou code idk c'est dégueu
+    my_char = listing_my_char()
+    for all_char_on_one_server in my_char.items():  # good var name !
+        for char in all_char_on_one_server[1]:
+            write_stat(all_char_on_one_server[0], char, token)
 
 
 def main():
