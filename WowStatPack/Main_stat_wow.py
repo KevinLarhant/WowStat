@@ -22,16 +22,17 @@ def request_to_api_for_json(req):
 
 
 def request_to_api(req):
-    print('requesting request_to_api : ', req)
-    try:
-        res_request = requests.get(req)
-        if res_request.ok:
-            return res_request.json()
-        else:
-            print('Error request : ', res_request.status_code, res_request.reason, ' in ', res_request.elapsed, 'ms')
-            raise ConnectionError()
-    except ConnectionError:
-        pass
+    # try:
+    res_request = requests.get(req)
+    if res_request.ok:
+        return res_request.json()
+    else:
+        print('Error request : ', res_request.status_code, res_request.reason, ' in ', res_request.elapsed, 'ms')
+        print('\t\tRequete : ', req)
+        print('\t\t\tCause : Mal orthographié, Maj, ou non connecté depuis longtemps')
+    #         raise ConnectionError()
+    # except ConnectionError:
+    #     pass
 
 
 def get_all_stat_by_server_name(realm, char, token):
@@ -62,26 +63,35 @@ def create_url(char, type_stat):
     things = f'{APIPath}{path_profile}/{char[0]}/{char[1]}{type_stat}?'
     # ajout des paramètre après
     things += f'{paramz}{token}'
-    print('things :', things)
     return things
 
 
 def get_Ragna_done(char):
-    type_stat = path_raids
+    type_stat = path_stats_raids
+
     res = request_to_api(create_url(char, type_stat))
+    # raids = res['expansions']
+    try:
+        count = get_nb_kill_from_jsonAPI(res, 73, 198)
+        return count
+    except (KeyError,TypeError) as e:
+        print('Error get stat sur : ', char)
+        print('\t\tCause : Rien fait sur ce perso')
+    return 0
 
-    # sssssssssssssssssssssssssaaale
-    # et non ça marche pas
-    # res['expansions'][3]['instances'][3]['modes'][0]['progress']['encounters'][6]['completed_count']
-    w = res['expansions'][3]['instances']
-    # todo get isntances ou autre par id (ragna = 198)
-    print(type(res))
-    print(type(w), ':', w)
-    a = find('encounters', res)
-    for i in a:
-        print('->', i)
 
-    return 1
+def get_nb_kill_from_jsonAPI(res, expansion_id, boss_id):
+    count = 0
+    aze = zip(res['expansions'])
+    for n in aze:
+        mlj = n[0]
+        if mlj['expansion']['id'] == expansion_id:
+            a = find('encounters', mlj)
+            for z in a:
+                for j in z:
+                    if j['encounter']['id'] == boss_id:
+                        count += j['completed_count']
+    return count
 
 
 def get_for_all_char(func):
@@ -110,8 +120,8 @@ def main():
     # create_json_file()
 
     # test new fonctionnnemlnt
-    print(get_Ragna_done(All_char['Waktorr']))
-    # print(get_for_all_char(get_Ragna_done))
+    # print(get_Ragna_done(All_char['Klehia']))
+    print(get_for_all_char(get_Ragna_done))
 
 
 token = get_token(tokenURL + credentials)

@@ -7,7 +7,7 @@ credentials = f'&client_id={myOAuth}&client_secret={mySecret}'
 # for requests
 APIPath = 'https://eu.api.blizzard.com'
 path_profile = '/profile/wow/character'
-path_raids = '/encounters/raids'
+path_stats_raids = '/encounters/raids'
 paramz = 'namespace=profile-eu&locale=en_US&access_token='
 token = ''
 
