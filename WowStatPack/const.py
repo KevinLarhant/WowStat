@@ -16,25 +16,6 @@ dal = 'dalaran'
 ys = 'ysondre'
 
 # char
-# Akto = ('dalaran', 'aktø')
-# Waktorr = ('dalaran', 'waktorr')
-# Kishaa = ('dalaran', 'kishaa')
-# Akkto = ('dalaran', 'akkto')
-# Aktok = ('dalaran', 'aktok')
-# Kyootie = ('dalaran', 'kyootie')
-# Kylx = ('dalaran', 'kylx')
-# Keanna = ('dalaran', 'keanna')
-# Wakito = ('dalaran', 'wakito')
-# Kboom = ('dalaran', 'kboom')
-# Kaezia = ('dalaran', 'kaezia')
-# Kamss = ('dalaran', 'kamss')
-# Aktto = ('dalaran', 'aktto')
-# Klehia = ('dalaran', 'klehia')
-# Akto2_ys = ('dalaran', 'aktø')
-# Kziin = ('dalaran', 'kziin')
-# Akto_ys = ('dalaran', 'akto')
-# All_char = [Akto, Waktorr, Kishaa, Akkto, Aktok, Kyootie, Kylx, Keanna, Wakito, Kboom, Kaezia,
-#             Kamss, Aktto, Klehia, Akto2_ys, Kziin, Akto_ys]
 All_char = {
     'Akto': ('dalaran', 'aktø'),
     'Waktorr': ('dalaran', 'waktorr'),

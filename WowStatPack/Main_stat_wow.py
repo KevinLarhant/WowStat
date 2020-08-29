@@ -112,3 +112,9 @@ def main():
 
 token = get_token(tokenURL + credentials)
 main()
+
+
+# todo : get_Ragna_done => getkillboss  -  interesting boss in var like All_char
+# todo? requeteur : 'nom boss'  => résultat ?
+# todo : DB to not spam API with request
+# flask / django
