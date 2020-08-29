@@ -52,7 +52,9 @@ def write_stat(realm, char, token):
         fileStat.write(json.dumps(get_all_stat_by_server_name(realm, char, token), indent=4))
 
 
-def create_json_file():  # todo:refaire structure ou code idk c'est dégueu
+# recup / creation fichier stat all persos - UTILE 1 FOIS
+# Après changement de l'api, inutile
+def create_json_file():
     my_char = listing_my_char()
     for all_char_on_one_server in my_char.items():  # good var name !
         for char in all_char_on_one_server[1]:
@@ -115,8 +117,6 @@ def find(key, dictionary):
 
 
 def main():
-    # recup / creation fichier stat all persos - UTILE 1 FOIS - à jour 23/08/2020
-    # et non maintenat c'est nul
     # create_json_file()
 
     # test new fonctionnnemlnt
