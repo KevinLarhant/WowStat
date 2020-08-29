@@ -8,19 +8,6 @@ def get_token(url):
     return requests.get(url).json()['access_token']
 
 
-def request_to_api_for_json(req):
-    print('requesting request_to_api_for_json: ', APIPath + req)
-    try:
-        res_request = requests.get(APIPath + req)
-        if res_request.ok:
-            return res_request.json()
-        else:
-            print('Error request : ', res_request.status_code, res_request.reason, ' in ', res_request.elapsed, 'ms')
-            raise ConnectionError()
-    except JSONDecodeError:
-        print('Error decode JSON')
-
-
 def request_to_api(req):
     # try:
     res_request = requests.get(req)
@@ -35,16 +22,12 @@ def request_to_api(req):
     #     pass
 
 
-def get_all_stat_by_server_name(realm, char, token):
-    return request_to_api_for_json(
-        f'/profile/wow/character/{realm}/{char}?fields=statistics&locale=en_US&access_token={token}&namespace=profile-eu')
-
-
 def get_gold_CM_done(statJson):
     res = statJson['statistics']['subCategories'][14]['statistics'][12]
     return res['quantity']
 
 
+# Après changement de l'api, inutile :'(
 def write_stat(realm, char, token):
     name_file = 'jsonStats/' + realm + '_' + char + '_' + 'stat.json'
     print('file : ', name_file)
@@ -53,7 +36,7 @@ def write_stat(realm, char, token):
 
 
 # recup / creation fichier stat all persos - UTILE 1 FOIS
-# Après changement de l'api, inutile
+# Après changement de l'api, inutile :'(
 def create_json_file():
     my_char = listing_my_char()
     for all_char_on_one_server in my_char.items():  # good var name !
@@ -76,12 +59,13 @@ def get_Ragna_done(char):
     try:
         count = get_nb_kill_from_jsonAPI(res, 73, 198)
         return count
-    except (KeyError,TypeError) as e:
+    except (KeyError, TypeError) as e:
         print('Error get stat sur : ', char)
         print('\t\tCause : Rien fait sur ce perso')
     return 0
 
 
+# todo : rename
 def get_nb_kill_from_jsonAPI(res, expansion_id, boss_id):
     count = 0
     aze = zip(res['expansions'])
@@ -96,6 +80,7 @@ def get_nb_kill_from_jsonAPI(res, expansion_id, boss_id):
     return count
 
 
+# <3
 def get_for_all_char(func):
     res = 0
     for char in All_char.items():
@@ -119,7 +104,6 @@ def find(key, dictionary):
 def main():
     # create_json_file()
 
-    # test new fonctionnnemlnt
     # print(get_Ragna_done(All_char['Klehia']))
     print(get_for_all_char(get_Ragna_done))
 
